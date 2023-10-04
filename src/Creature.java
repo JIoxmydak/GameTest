@@ -4,11 +4,9 @@ public class Creature {
     private int health;
     private final int damageMin;
     private final int damageMax;
-    int attackDamage;
+    private int attackDamage;
+
     public Creature(int attackPower, int defence, int health, int damageMin, int damageMax) {
-
-
-
         this.attackPower = attackPower;
         this.defence = defence;
         this.health = health;
@@ -16,18 +14,31 @@ public class Creature {
         this.damageMax = damageMax;
     }
 
+    public int getAttackPower() {
+        return attackPower;
+    }
+
+    public int getDefence() {
+        return defence;
+    }
+    public int getHealth() {
+        return this.health;
+    }
+    public int getDamageMin() {
+        return damageMin;
+    }
+    public int getDamageMax() {
+        return damageMax;
+    }
+    public int getAttackDamage() {
+        return attackDamage;
+    }
+
     public void setHealth(int health) {
         this.health = health;
     }
 
-    public int getHealth() {
-        return this.health;
-    }
-
     public boolean isAlive() {
-        if (health <= 0) {
-            System.out.println();
-        }
         return health > 0;
     }
 
@@ -36,11 +47,11 @@ public class Creature {
     }
 
     private void takeDamage(int damage) {
+        attackDamage = damage;
         health -= damage;
         if (health < 0 ) {
             health = 0;
         }
-        attackDamage = damage;
     }
 
     public boolean attack(Creature opponent) {
@@ -49,7 +60,7 @@ public class Creature {
         boolean isHit = false;
 
         while (diceAmount > 0) {
-            int diceNumber = (int) (Math.random() * (6 - 1)) + 1;
+            int diceNumber = (int) (Math.random() * 5) + 1;
             if (diceNumber > 4) {
                 isHit = true;
                 break;

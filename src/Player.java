@@ -13,8 +13,7 @@ public class Player extends Creature {
 
     public void heal() {
         if (healingCount > 0 && isAlive()) {
-
-            healedAmount = (int) (getHealth() * healingMultiplier);
+            healedAmount = (int) (healthMax * healingMultiplier);
             setHealth(Math.min(healthMax, getHealth() + healedAmount));
             healingCount--;
         }

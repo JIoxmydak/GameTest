@@ -6,18 +6,9 @@ public class Creature {
     private final int damageMax;
     int attackDamage;
     public Creature(int attackPower, int defence, int health, int damageMin, int damageMax) {
-        if (attackPower > 30 || attackPower < 1) {
-            throw new IllegalArgumentException("Attack power should be in range of 1 to 30. Enter correct attack power, please.");
-        }
-        if (defence > 30 || defence < 1) {
-            throw new IllegalArgumentException("Defence should be in range of 1 to 30. Enter correct defence, please.");
-        }
-        if (damageMin < 1) {
-            throw new IllegalArgumentException("Minimal damage can't be less then 0. Enter correct minimal damage, please.");
-        }
-        if (damageMax < damageMin) {
-            throw new IllegalArgumentException("Maximal damage can't be less then minimal damage. Enter correct maximal damage, please.");
-        }
+
+
+
         this.attackPower = attackPower;
         this.defence = defence;
         this.health = health;
@@ -34,6 +25,9 @@ public class Creature {
     }
 
     public boolean isAlive() {
+        if (health <= 0) {
+            System.out.println();
+        }
         return health > 0;
     }
 

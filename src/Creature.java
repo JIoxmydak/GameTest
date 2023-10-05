@@ -1,65 +1,99 @@
-public class Creature {
-    private final int attackPower; // The creature's attack power.
-    private final int defence; // The creature's defense.
-    private int health; // The creature's current health.
-    private final int minDamage; // The minimum damage the creature can deal.
-    private final int maxDamage; // The maximum damage the creature can deal.
-    private int attackDamage; // The damage dealt in the current attack.
+public abstract class Creature {
+    private final int attackPower;
+    private final int defence;
+    private int health;
+    private final int minDamage;
+    private final int maxDamage;
+    private int attackDamage;
 
+    // Constructor for the Creature class, used to initialize its attributes.
     public Creature(int attackPower, int defence, int health, int minDamage, int maxDamage) {
-        this.attackPower = attackPower; // Initialize the creature's attack power.
-        this.defence = defence; // Initialize the creature's defense.
-        this.health = health; // Initialize the creature's health.
-        this.minDamage = minDamage; // Initialize the minimum damage.
-        this.maxDamage = maxDamage; // Initialize the maximum damage.
+        // Initialize the attack power attribute with the provided value.
+        this.attackPower = attackPower;
+
+        // Initialize the defense attribute with the provided value.
+        this.defence = defence;
+
+        // Initialize the health attribute with the provided value.
+        this.health = health;
+
+        // Initialize the minimum damage attribute with the provided value.
+        this.minDamage = minDamage;
+
+        // Initialize the maximum damage attribute with the provided value.
+        this.maxDamage = maxDamage;
     }
 
+    // Get the creature's current health.
     public int getHealth() {
-        return this.health; // Get the creature's current health.
+        return this.health;
     }
 
+    // Get the damage dealt in the current attack.
     public int getAttackDamage() {
-        return attackDamage; // Get the damage dealt in the current attack.
+        return attackDamage;
     }
 
+    // Set the creature's health to a specific value.
     public void setHealth(int health) {
-        this.health = health; // Set the creature's health to a specific value.
+        this.health = health;
     }
 
+    // Check if the creature is alive based on its health.
     public boolean isAlive() {
-        return health > 0; // Check if the creature is alive based on its health.
+        return health > 0;
     }
 
-    private int calculateDamage() {
-        return (int) (Math.random() * (maxDamage - minDamage + 1)) + minDamage; // Calculate a random damage value within the specified range.
-    }
+    public void performAttack(Creature target) {
+        // Get the names of the attacker and target creatures (e.g., "Player" or "Monster").
+        String attackerName = this.getClass().getSimpleName();
+        String targetName = target.getClass().getSimpleName();
 
-    private void takeDamage(int damage) {
-        attackDamage = damage; // Record the damage dealt in the current attack.
-        health -= damage; // Reduce the creature's health by the received damage.
-        if (health < 0) {
-            health = 0; // Ensure that health does not go below 0.
+        // Check if the attack is successful.
+        if (this.attack(target)) {
+            if (!target.isAlive()) {
+                // If the attack defeats the target, display a victory message.
+                System.out.printf("%s killed %s!%n", attackerName, targetName);
+            } else {
+                // If the attack damages the target, display the damage dealt and target's health.
+                System.out.printf("%s attacked %s! Damage dealt: %d\t%s health: %d%n", attackerName, targetName, target.getAttackDamage(), targetName, target.getHealth());
+            }
+        } else {
+            // If the attack misses, display a "missed" message.
+            System.out.println(attackerName + " missed!");
         }
     }
 
-    public boolean attack(Creature opponent) {
-        int attackModifier = attackPower - opponent.defence + 1; // Calculate the attack modifier.
-        int diceAmount = Math.max(1, attackModifier); // Determine the number of dice rolls for the attack.
+    private int calculateDamage() {
+        return (int) (Math.random() * (maxDamage - minDamage + 1)) + minDamage;
+    }
+
+    private void takeDamage(int damage) {
+        attackDamage = damage;
+        health -= damage;
+        if (health < 0) {
+            health = 0;
+        }
+    }
+
+    private boolean attack(Creature target) {
+        int attackModifier = attackPower - target.defence + 1;
+        int diceAmount = Math.max(1, attackModifier);
         boolean isHit = false;
 
         while (diceAmount > 0) {
-            int diceNumber = (int) (Math.random() * 5) + 1; // Simulate a dice roll with 5 sides.
+            int diceNumber = (int) (Math.random() * 5) + 1;
             if (diceNumber > 4) {
-                isHit = true; // If the dice roll is successful (5 or higher), the attack hits.
+                isHit = true;
                 break;
             }
             diceAmount--;
         }
 
         if (isHit) {
-            opponent.takeDamage(calculateDamage()); // If the attack hits, calculate and apply damage to the opponent.
+            target.takeDamage(calculateDamage());
         }
 
-        return isHit; // Return whether the attack was successful (hit the opponent).
+        return isHit;
     }
 }

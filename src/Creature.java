@@ -2,48 +2,32 @@ public class Creature {
     private final int attackPower;
     private final int defence;
     private int health;
-    private final int damageMin;
-    private final int damageMax;
+    private final int minDamage;
+    private final int maxDamage;
     private int attackDamage;
 
-    public Creature(int attackPower, int defence, int health, int damageMin, int damageMax) {
+    public Creature(int attackPower, int defence, int health, int minDamage, int maxDamage) {
         this.attackPower = attackPower;
         this.defence = defence;
         this.health = health;
-        this.damageMin = damageMin;
-        this.damageMax = damageMax;
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 
-    public int getAttackPower() {
-        return attackPower;
-    }
-
-    public int getDefence() {
-        return defence;
-    }
     public int getHealth() {
         return this.health;
-    }
-    public int getDamageMin() {
-        return damageMin;
-    }
-    public int getDamageMax() {
-        return damageMax;
     }
     public int getAttackDamage() {
         return attackDamage;
     }
-
     public void setHealth(int health) {
         this.health = health;
     }
-
     public boolean isAlive() {
         return health > 0;
     }
-
     private int calculateDamage() {
-        return (int) (Math.random() * (damageMax - damageMin + 1)) + damageMin;
+        return (int) (Math.random() * (maxDamage - minDamage + 1)) + minDamage;
     }
 
     private void takeDamage(int damage) {

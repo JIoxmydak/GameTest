@@ -4,8 +4,8 @@ public class Player extends Creature {
     private int healedAmount;
     private final double healingMultiplier;
 
-    public Player(int attackPower, int defence, int health, int damageMin, int damageMax) {
-        super(attackPower, defence, health, damageMin, damageMax);
+    public Player(int attackPower, int defence, int health, int minDamage, int maxDamage) {
+        super(attackPower, defence, health, minDamage, maxDamage);
         healthMax = health;
         healingCount = 4;
         healingMultiplier = 0.3;

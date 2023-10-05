@@ -138,7 +138,7 @@ public class Game {
         System.out.print(gameResult);
     }
 
-    public void healCondition(Player player) {
+    private void healCondition(Player player) {
         System.out.printf("\nYou have %d healing potions. Would you like to heal? Enter y/n%n", player.getHealingCount());
         String answer = "";
             do {

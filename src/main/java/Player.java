@@ -1,5 +1,5 @@
 public class Player extends Creature {
-    private final int healthMax;
+    final int healthMax;
     private int healingCount;
     private int healedAmount;
     private final double healingMultiplier;

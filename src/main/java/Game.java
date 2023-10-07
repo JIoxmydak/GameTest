@@ -6,12 +6,7 @@ public class Game {
     private int round = 1;
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public Game() {
-        // Display a welcome message when the game is created.
-        System.out.println("\t\t\tWelcome to the game Player vs Monster!");
-    }
-
-    public void start(Player player, Monster monster) {
+    public void start(Player player, Monster monster) throws InterruptedException {
         // Display a message to indicate the game has started.
         System.out.println("\nGame started!");
 
@@ -22,8 +17,9 @@ public class Game {
             // Player attacks the monster.
             player.performAttack(monster);
 
-            // Check if the monster is defeated (not alive), and break the loop if it is.
+            // Check if the monster is defeated (not alive), offer to play another game and  break the loop if user decline.
             if (!monster.isAlive()) {
+                anotherGame(player);
                 break;
             }
 
@@ -41,10 +37,16 @@ public class Game {
             }
 
             System.out.println("\n------------------------------------------------------------");
-        }
 
-        // Determine the win condition for the game.
-        winCondition(player);
+            //noinspection BusyWait
+            Thread.sleep(2000);
+        }
+    }
+
+    public void gameResult(Player player) {
+        System.out.println("\n------------------------------------------------------------\n");
+        String gameResult = player.isAlive() ? "Game result: Player won!\n" : "Game result: Monster won!\n";
+        System.out.print(gameResult);
     }
 
     // Create a new Player based on user input.
@@ -99,25 +101,40 @@ public class Game {
         return value;
     }
 
-    private void winCondition(Player player) {
-        System.out.println("\n------------------------------------------------------------");
-        String gameResult = player.isAlive() ? "\nGame result: Player won!" : "\nGame result: Monster won!";
-        System.out.print(gameResult);
+    private void anotherGame(Player player) throws InterruptedException {
+        System.out.println("\nWould you like to fight with a new monster? Enter y/n");
+
+        switch (getUserAnswer()) {
+            case "y" -> {
+                System.out.println("\nLet's start a new battle!");
+                round = 1;
+                player.setHealth(player.healthMax);
+                System.out.printf("Player was healed! Player's health: %d%n", player.getHealth());
+                Monster newMonster = this.createMonster();
+                this.start(player, newMonster);
+            }
+            case "n" -> System.out.println("You rejected to fight coward :c Poor you!");
+        }
     }
 
     private void healingProcess(Player player) {
         System.out.printf("\nYou have %d healing potions. Would you like to heal? Enter y/n%n", player.getHealingCount());
+
+        switch (getUserAnswer()) {
+            case "y" -> {
+                player.heal();
+                System.out.printf("Player was healed on %d points. Player's health: %d%n", player.getHealedAmount(), player.getHealth());
+            }
+            case "n" -> System.out.println("You rejected to heal. Wish you luck!");
+        }
+    }
+
+    private String getUserAnswer() {
         String answer = "";
 
         do {
             try {
-                switch (answer = reader.readLine()) {
-                    case "y" -> {
-                        player.heal();
-                        System.out.printf("Player was healed on %d points. Player's health: %d%n", player.getHealedAmount(), player.getHealth());
-                    }
-                    case "n" -> System.out.println("You rejected to heal. Wish you luck!");
-                }
+                answer = reader.readLine();
                 if (!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n")) {
                     throw new IllegalArgumentException();
                 }
@@ -125,6 +142,8 @@ public class Game {
                 System.out.println("Incorrect answer was entered. Please enter y/n.");
             }
         } while (!answer.equalsIgnoreCase("y") && !answer.equalsIgnoreCase("n"));
+
+        return answer;
     }
 
 }

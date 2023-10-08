@@ -1,10 +1,10 @@
 public class Player extends Creature {
-    final int healthMax;
+    private final long healthMax;
     private int healingCount;
-    private int healedAmount;
+    private long healedAmount;
     private final double healingMultiplier;
 
-    public Player(int attackPower, int defence, int health, int minDamage, int maxDamage) {
+    public Player(int attackPower, int defence, long health, long minDamage, long maxDamage) {
         // Call the constructor of the parent class (Creature).
         super(attackPower, defence, health, minDamage, maxDamage);
 
@@ -24,23 +24,32 @@ public class Player extends Creature {
         if (healingCount > 0 && isAlive()) {
 
             // Calculate the amount of health to be restored.
-            healedAmount = (int) (healthMax * healingMultiplier);
-
-            // Increase the player's health without exceeding the maximum.
-            setHealth(Math.min(healthMax, getHealth() + healedAmount));
-
+            healedAmount = (long) (healthMax * healingMultiplier);
+            long healthAfterHealing = getHealth() + healedAmount;
+            if (healthAfterHealing <= 0) {
+                healthAfterHealing = healthMax;
+            }
+            setHealth(healthAfterHealing);
             // Decrease the number of healing potions available.
             healingCount--;
         }
     }
 
     // Get the amount of health restored in the last healing.
-    public int getHealedAmount() {
+    public long getHealedAmount() {
         return healedAmount;
     }
 
     // Get the remaining number of healing potions.
     public int getHealingCount() {
         return healingCount;
+    }
+
+    public void setHealingCount(int healingCount) {
+        this.healingCount = healingCount;
+    }
+
+    public long getHealthMax() {
+        return healthMax;
     }
 }

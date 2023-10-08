@@ -12,7 +12,7 @@ public class Game {
 
         while (player.isAlive() && monster.isAlive()) {
             // Display the current round number.
-            System.out.printf("\n[Round %d]%n", round++);
+            displayRoundInfo();
 
             // Player attacks the monster.
             player.performAttack(monster);
@@ -43,10 +43,8 @@ public class Game {
         }
     }
 
-    public void gameResult(Player player) {
-        System.out.println("\n------------------------------------------------------------\n");
-        String gameResult = player.isAlive() ? "Game result: Player won!\n" : "Game result: Monster won!\n";
-        System.out.print(gameResult);
+    public void welcomeMessage() {
+        System.out.println("\t\t\tWelcome to the game Player vs Monster!");
     }
 
     // Create a new Player based on user input.
@@ -56,7 +54,22 @@ public class Game {
 
     // Create a new Monster based on user input.
     public Monster createMonster() {
-        return (Monster) createCharacter(Monster.class);
+        long[] monsterStats = getRandomStats();
+        return new Monster((int) monsterStats[0], (int) monsterStats[1], monsterStats[2], monsterStats[3], monsterStats[4]);
+    }
+
+    private long[] getRandomStats() {
+        int attackPower = (int) (Math.random() * 30) + 1;
+        int defence = (int) (Math.random() * 30) + 1;
+        long health = (long) (Math.random() * Long.MAX_VALUE) + 1;
+        long minDamage = (long) (Math.random() * Long.MAX_VALUE) + 1;
+        long maxDamage = (long) (Math.random() * (Long.MAX_VALUE - minDamage + 1)) + minDamage;
+
+        return new long[]{attackPower, defence, health, minDamage, maxDamage};
+    }
+
+    private void displayRoundInfo() {
+        System.out.printf("\n[Round %d]%n", round++);
     }
 
     private Creature createCharacter(Class<? extends Creature> characterClass) {
@@ -65,34 +78,34 @@ public class Game {
 
         int attackPower = 0;
         int defense = 0;
-        int health = 0;
-        int minDamage = 0;
-        int maxDamage = 0;
+        long health = 0;
+        long minDamage = 0;
+        long maxDamage = 0;
 
         while (attackPower == 0 || defense == 0 || health == 0 || minDamage == 0 || maxDamage == 0) {
             try {
-                attackPower = getInputInRange(character + "'s attack power", 1, 30);
-                defense = getInputInRange(character + "'s defense", 1, 30);
-                health = getInputInRange(character + "'s health", 1, Integer.MAX_VALUE);
-                minDamage = getInputInRange(character + "'s minimal damage", 1, Integer.MAX_VALUE);
-                maxDamage = getInputInRange(character + "'s maximal damage", minDamage, Integer.MAX_VALUE);
+                attackPower = (int) getInputInRange(character + "'s attack power", 1, 30);
+                defense = (int) getInputInRange(character + "'s defense", 1, 30);
+                health = getInputInRange(character + "'s health", 1, Long.MAX_VALUE);
+                minDamage = getInputInRange(character + "'s minimal damage", 1, Long.MAX_VALUE);
+                maxDamage = getInputInRange(character + "'s maximal damage", minDamage, Long.MAX_VALUE);
             } catch (Exception e) {
                 System.out.println("Incorrect characteristics were entered. Try again and enter correct characteristics, please.\n");
             }
         }
         try {
-            return characterClass.getDeclaredConstructor(int.class, int.class, int.class, int.class, int.class).newInstance(attackPower, defense, health, minDamage, maxDamage);
+            return characterClass.getDeclaredConstructor(int.class, int.class, long.class, long.class, long.class).newInstance(attackPower, defense, health, minDamage, maxDamage);
         } catch (Exception methodEx){
             return null;
         }
     }
 
-    private int getInputInRange(String prompt, int minValue, int maxValue) throws IOException {
-        int value;
+    private long getInputInRange(String prompt, long minValue, long maxValue) throws IOException {
+        long value;
 
         do {
             System.out.println("Enter " + prompt + ". It should be in range from " + minValue + " to " + maxValue + ": ");
-            value = Integer.parseInt(reader.readLine());
+            value = Long.parseLong(reader.readLine());
             if (value < minValue || value > maxValue) {
                 System.out.println("Input out of range. Please enter a valid value.\n");
             }
@@ -102,19 +115,23 @@ public class Game {
     }
 
     private void anotherGame(Player player) throws InterruptedException {
-        System.out.println("\nWould you like to fight with a new monster? Enter y/n");
+        System.out.println("\n------------------------------------------------------------\n");
+        System.out.println("Would you like to fight with a new monster? Enter y/n");
 
         switch (getUserAnswer()) {
-            case "y" -> {
-                System.out.println("\nLet's start a new battle!");
-                round = 1;
-                player.setHealth(player.healthMax);
-                System.out.printf("Player was healed! Player's health: %d%n", player.getHealth());
-                Monster newMonster = this.createMonster();
-                this.start(player, newMonster);
-            }
-            case "n" -> System.out.println("You rejected to fight coward :c Poor you!");
+            case "y" -> startNewBattle(player);
+            case "n" -> System.out.println("\nYou rejected to fight coward :c Poor you!");
         }
+    }
+
+    private void startNewBattle(Player player) throws InterruptedException {
+        System.out.println("\nLet's start a new battle!");
+        round = 1;
+        player.setHealingCount(4);
+        player.setHealth(player.getHealthMax());
+        System.out.printf("Player was healed and potions were restored! Player's health: %d | Amount of potions: %d%n", player.getHealth(), player.getHealingCount());
+        Monster newMonster = createMonster();
+        start(player, newMonster);
     }
 
     private void healingProcess(Player player) {

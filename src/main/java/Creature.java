@@ -1,13 +1,13 @@
 public abstract class Creature {
     private final int attackPower;
     private final int defence;
-    private long health;
-    private final long minDamage;
-    private final long maxDamage;
-    private long attackDamage;
+    private int health;
+    private final int minDamage;
+    private final int maxDamage;
+    private int attackDamage;
 
     // Constructor for the Creature class, used to initialize its attributes.
-    public Creature(int attackPower, int defence, long health, long minDamage, long maxDamage) {
+    public Creature(int attackPower, int defence, int health, int minDamage, int maxDamage) {
         // Initialize the attack power attribute with the provided value.
         this.attackPower = attackPower;
 
@@ -25,17 +25,12 @@ public abstract class Creature {
     }
 
     // Get the creature's current health.
-    public long getHealth() {
-        return this.health;
-    }
-
-    // Get the damage dealt in the current attack.
-    public long getAttackDamage() {
-        return attackDamage;
+    public int getHealth() {
+        return health;
     }
 
     // Set the creature's health to a specific value.
-    public void setHealth(long health) {
+    public void setHealth(int health) {
         this.health = health;
     }
 
@@ -44,7 +39,7 @@ public abstract class Creature {
         return health > 0;
     }
 
-    public void performAttack(Creature target) {
+    public void performAttack(Creature target) throws InterruptedException {
         // Get the names of the attacker and target creatures (e.g., "Player" or "Monster").
         String attackerName = getClass().getSimpleName();
         String targetName = target.getClass().getSimpleName();
@@ -55,22 +50,23 @@ public abstract class Creature {
                 // If the attack defeats the target, display a victory message.
                 System.out.printf("%s killed %s!%n", attackerName, targetName);
                 System.out.println("\n------------------------------------------------------------\n");
-                System.out.printf("Game result: %s won!%n", attackerName);
             } else {
                 // If the attack damages the target, display the damage dealt and target's health.
-                System.out.printf("%s attacked %s! Damage dealt: %d\t%s's health: %d%n", attackerName, targetName, target.getAttackDamage(), targetName, target.getHealth());
+                System.out.printf("%s attacked %s! Damage dealt: %d\t%s's health: %d%n", attackerName, targetName, target.attackDamage, targetName, target.getHealth());
             }
         } else {
             // If the attack misses, display a "missed" message.
             System.out.println(attackerName + " missed!");
         }
+
+        Thread.sleep(2000);
     }
 
-    private long calculateDamage() {
-        return (long) (Math.random() * (maxDamage - minDamage + 1)) + minDamage;
+    private int calculateDamage() {
+        return (int) (Math.random() * (maxDamage - minDamage + 1)) + minDamage;
     }
 
-    private void takeDamage(long damage) {
+    private void takeDamage(int damage) {
         attackDamage = damage;
         health -= damage;
         if (health < 0) {

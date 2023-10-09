@@ -119,7 +119,7 @@ public class Game {
                 minDamage = getInputInRange(character + "'s minimal damage", 1, 50);
                 maxDamage = getInputInRange(character + "'s maximal damage", minDamage + 1, 100);
             } catch (Exception e) {
-                System.out.println("Incorrect characteristics were entered. Try again and enter correct characteristics, please.\n");
+                System.out.println("Incorrect characteristics were entered. Try again and enter correct characteristics, please.\n\n");
             }
         }
         try {

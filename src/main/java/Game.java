@@ -39,7 +39,7 @@ public class Game {
                     System.out.println("Congratulations! Player defeated all monsters and completed the game!");
                     break;
                 }
-                anotherGame(player);
+                anotherGame();
                 break;
             }
 
@@ -80,7 +80,7 @@ public class Game {
         return new Monster(monsterStats[0], monsterStats[1], monsterStats[2], monsterStats[3], monsterStats[4]);
     }
 
-    private void anotherGame(Player player) throws InterruptedException {
+    private void anotherGame() throws InterruptedException {
         System.out.printf("Would you like to fight a level %d monster? Enter y/n%n", monsterLevel + 1);
 
         switch (getUserAnswer()) {

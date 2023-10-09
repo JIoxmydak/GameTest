@@ -59,7 +59,7 @@ public abstract class Creature {
             System.out.println(attackerName + " missed!");
         }
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 
     private int calculateDamage() {

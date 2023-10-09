@@ -12,6 +12,12 @@ public class Game {
         welcomeMessage();
         player = createPlayer();
         start();
+        try {
+            reader.close();
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
+        }
+
     }
 
     private void start() throws InterruptedException {
@@ -78,12 +84,12 @@ public class Game {
         System.out.printf("Would you like to fight a level %d monster? Enter y/n%n", monsterLevel + 1);
 
         switch (getUserAnswer()) {
-            case "y" -> startNewBattle(player);
+            case "y" -> startNewBattle();
             case "n" -> System.out.println("\nYou rejected to fight, coward. Poor you!");
         }
     }
 
-    private void startNewBattle(Player player) throws InterruptedException {
+    private void startNewBattle() throws InterruptedException {
         System.out.println("\nLet's start a new battle!");
         round = 1;
         monsterLevel++;

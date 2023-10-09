@@ -1,4 +1,4 @@
-public abstract class Creature {
+public class Creature {
     private final int attackPower;
     private final int defence;
     private int health;
@@ -6,56 +6,67 @@ public abstract class Creature {
     private final int maxDamage;
     private int attackDamage;
 
-    // Constructor for the Creature class, used to initialize its attributes.
+    /**
+     * Constructor for the Creature class, which represents characters in the game.
+     *
+     * @param attackPower The attack power of the creature.
+     * @param defence The defense of the creature.
+     * @param health The initial health of the creature.
+     * @param minDamage The minimum damage the creature can deal.
+     * @param maxDamage The maximum damage the creature can deal.
+     */
     public Creature(int attackPower, int defence, int health, int minDamage, int maxDamage) {
-        // Initialize the attack power attribute with the provided value.
         this.attackPower = attackPower;
-
-        // Initialize the defense attribute with the provided value.
         this.defence = defence;
-
-        // Initialize the health attribute with the provided value.
         this.health = health;
-
-        // Initialize the minimum damage attribute with the provided value.
         this.minDamage = minDamage;
-
-        // Initialize the maximum damage attribute with the provided value.
         this.maxDamage = maxDamage;
     }
 
-    // Get the creature's current health.
+    /**
+     * Retrieves the current health of the creature.
+     *
+     * @return The current health of the creature.
+     */
     public int getHealth() {
         return health;
     }
 
-    // Set the creature's health to a specific value.
+    /**
+     * Sets the health of the creature to a specific value.
+     *
+     * @param health The new health value to set.
+     */
     public void setHealth(int health) {
         this.health = health;
     }
 
-    // Check if the creature is alive based on its health.
+    /**
+     * Checks if the creature is alive based on its health.
+     *
+     * @return true if the creature's health is greater than 0; false otherwise.
+     */
     public boolean isAlive() {
         return health > 0;
     }
 
+    /**
+     * Performs an attack on a target creature.
+     *
+     * @param target The target creature to attack.
+     */
     public void performAttack(Creature target) throws InterruptedException {
-        // Get the names of the attacker and target creatures (e.g., "Player" or "Monster").
         String attackerName = getClass().getSimpleName();
         String targetName = target.getClass().getSimpleName();
 
-        // Check if the attack is successful.
-        if (this.attack(target)) {
+        if (attack(target)) {
             if (!target.isAlive()) {
-                // If the attack defeats the target, display a victory message.
                 System.out.printf("%s killed %s!%n", attackerName, targetName);
                 System.out.println("\n------------------------------------------------------------\n");
             } else {
-                // If the attack damages the target, display the damage dealt and target's health.
                 System.out.printf("%s attacked %s! Damage dealt: %d\t%s's health: %d%n", attackerName, targetName, target.attackDamage, targetName, target.getHealth());
             }
         } else {
-            // If the attack misses, display a "missed" message.
             System.out.println(attackerName + " missed!");
         }
 

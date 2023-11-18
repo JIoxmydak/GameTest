@@ -10,7 +10,7 @@ public class Battle {
      */
     public void start(Player player) throws InterruptedException {
         Monster monster = creator.createMonster(monsterLevel);
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         while (player.isAlive() && monster.isAlive()) {
             displayRoundInfo();
@@ -38,7 +38,7 @@ public class Battle {
             }
 
             System.out.println("\n------------------------------------------------------------");
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         }
     }
 
@@ -55,7 +55,7 @@ public class Battle {
         System.out.println("\nLet's start a new battle!");
         round = 1;
         monsterLevel++;
-        Thread.sleep(1000);
+        Thread.sleep(500);
         start(player);
     }
 
